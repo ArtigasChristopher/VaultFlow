@@ -1,0 +1,290 @@
+:root {
+    --bg-dark: #0a0c10;
+    --card-bg: rgba(255, 255, 255, 0.05);
+    --primary: #6366f1;
+    --primary-glow: rgba(99, 102, 241, 0.5);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Outfit', sans-serif;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Background Animations */
+.background-blobs {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: var(--primary);
+    filter: blur(80px);
+    border-radius: 50%;
+    opacity: 0.15;
+    animation: move 20s infinite alternate;
+}
+
+.blob-1 { top: -100px; left: -100px; }
+.blob-2 { bottom: -100px; right: -100px; background: #9333ea; }
+
+@keyframes move {
+    from { transform: translate(0, 0); }
+    to { transform: translate(100px, 100px); }
+}
+
+/* App Container */
+.app-container {
+    width: 90%;
+    max-width: 900px;
+    height: 85vh;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+header {
+    padding: 24px 32px;
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon { font-size: 24px; }
+h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; }
+
+.status-badge {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.pulse {
+    width: 8px;
+    height: 8px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+/* Chat Area */
+.chat-wrapper {
+    flex: 1;
+    padding: 32px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    scroll-behavior: smooth;
+}
+
+.welcome-message {
+    text-align: center;
+    margin: 40px 0;
+    color: var(--text-secondary);
+}
+
+.message {
+    max-width: 80%;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 15px;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.user-message {
+    align-self: flex-end;
+    background: var(--primary);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.ai-message {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text-primary);
+    border-bottom-left-radius: 4px;
+    border: 1px solid var(--glass-border);
+}
+
+/* Input Area */
+.input-area {
+    padding: 24px 32px;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid var(--glass-border);
+}
+
+#chat-form {
+    display: flex;
+    gap: 12px;
+}
+
+#user-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 14px 20px;
+    border-radius: 14px;
+    color: white;
+    font-size: 15px;
+    transition: all 0.2s;
+}
+
+#user-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+#send-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+#send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--primary-glow);
+}
+
+#send-btn svg { width: 20px; height: 20px; }
+
+/* Custom Scrollbar */
+.chat-wrapper::-webkit-scrollbar { width: 6px; }
+.chat-wrapper::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+
+/* Debug Panel */
+.debug-panel {
+    position: fixed;
+    right: 40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 320px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 20px;
+    font-family: monospace;
+    font-size: 11px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    z-index: 100;
+}
+
+.debug-header {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.debug-header h3 {
+    font-size: 13px;
+    color: #ef4444;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.anonymity-note {
+    font-size: 9px;
+    color: var(--text-secondary);
+}
+
+.db-viewer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.card-record {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px;
+    border-radius: 8px;
+    border-left: 3px solid #10b981;
+}
+
+.card-record.blocked {
+    border-left-color: #ef4444;
+}
+
+.row {
+    margin-bottom: 4px;
+}
+
+.label { color: var(--text-secondary); margin-right: 4px; }
+.val { color: var(--text-primary); }
+
+.tag-active { color: #10b981; font-weight: bold; }
+.tag-blocked { color: #ef4444; font-weight: bold; }
+
+@media (max-width: 1400px) {
+    .debug-panel {
+        position: relative;
+        transform: none;
+        top: 20px;
+        right: 0;
+        width: 100%;
+        margin-top: 20px;
+    }
+    body { overflow-y: auto; align-items: flex-start; padding: 40px 0; }
+    .app-container { height: auto; min-height: 80vh; }
+}

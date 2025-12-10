@@ -1,0 +1,284 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "/vaultflow-agent",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "80d72efd-b190-480c-a941-78bd70eb31e7",
+      "name": "Webhook",
+      "webhookId": "85c79e89-3433-4bcb-867d-c88e469f766e"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b939f9bd-e64a-475c-b668-bcb009b44a46",
+              "name": "safe_text",
+              "value": "={{ $json.safe_text }}",
+              "type": "string"
+            },
+            {
+              "id": "60ba5f5b-7291-4805-9dad-7ca6f7531a80",
+              "name": "token_map",
+              "value": "={{ $json.token_map }}",
+              "type": "object"
+            },
+            {
+              "id": "76bd7837-d219-4b08-ac3e-0da598b1c8e8",
+              "name": "sessionId",
+              "value": "={{ $('Webhook').item.json.sessionId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "afb04498-d51a-47ed-86e5-9071c3dc5366",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        608,
+        256
+      ],
+      "id": "571eea09-bd22-45f9-b59c-f9d9876ed227",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Q1hhlmOhDZtDaHBI",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/obfuscate",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $json.body.message }}"
+            },
+            {
+              "name": "session_id",
+              "value": "={{ $json.body.sessionId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "4ac403e2-3d87-474f-94c1-d163f88b9eba",
+      "name": "Obfuscate"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/deobfuscate",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ { \"safe_text\": $json.output, \"token_map\": $('Edit Fields').item.json.token_map, \"session_id\": $('Edit Fields').item.json.sessionId } }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        976,
+        0
+      ],
+      "id": "1ef0b3f4-b680-48c4-8156-98f7993afbc1",
+      "name": "Deobfuscate"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.safe_text }}",
+        "options": {
+          "systemMessage": "Tu es un agent du support bancaire VaultFlow. \n\nREGLES :\n- Utilise les informations fournies (ex: [PERSON_1], [EMAIL_1]) pour appeler tes outils.\n- Ne discute JAMAIS de la forme des données ou des codes avec l'utilisateur.\n- Si un outil ne trouve pas de compte, réponds simplement : 'Je n'ai trouvé aucun email correspondant à un client.'\n- Sois direct et efficace."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        608,
+        0
+      ],
+      "id": "19fa7c40-6aaf-49c4-afc7-849ad122b09a",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://host.docker.internal:8000/execute_tool",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "tool_name",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters0_Value', `tool_name : Actions: \"check_card_status\", \"block_card\", \"unblock_card\" ou \"get_user_profile\"`, 'string') }}"
+            },
+            {
+              "name": "card_token",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters1_Value', `card_token : L'identifiant sécurisé de la carte (ex: [CREDIT_CARD_1])`, 'string') }}"
+            },
+            {
+              "name": "email_token",
+              "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('parameters2_Value', `email_token : L'identifiant sécurisé de l'email (ex: [EMAIL_1])`, 'string') }}"
+            },
+            {
+              "name": "token_map",
+              "value": "={{ $('Edit Fields').item.json.token_map }}"
+            },
+            {
+              "name": "session_id",
+              "value": "={{ $('Edit Fields').item.json.sessionId }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        768,
+        208
+      ],
+      "id": "43d576c2-1927-46cc-9e36-1cb7a8d6310c",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.sessionId }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        704,
+        352
+      ],
+      "id": "ab810d8d-6d7d-419b-a268-4d8d870a882d",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Obfuscate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obfuscate": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Deobfuscate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e6b1a401-782d-4d75-8a83-e5c90704776d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "d9afc9104dca406e3cb8ca7a8f559aabf2ae6d7913c266746e2b795276f970e2"
+  },
+  "id": "RVBiBWzqO7XYZFcB",
+  "tags": []
+}

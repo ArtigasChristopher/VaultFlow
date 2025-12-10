@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VaultFlow | Private AI Agent</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+    
+    <main class="app-container">
+        <header>
+            <div class="logo">
+                <span class="logo-icon">🔒</span>
+                <h1>VaultFlow</h1>
+            </div>
+            <div class="status-badge">
+                <span class="pulse"></span> Airlock Secure
+            </div>
+        </header>
+
+        <section class="chat-wrapper" id="chat-container">
+            <div class="welcome-message">
+                <h2>Bienvenue chez VaultFlow Support</h2>
+                <p>Votre assistant bancaire privé. Toutes vos données sont automatiquement anonymisées avant d'être traitées par l'IA.</p>
+            </div>
+            <!-- Messages will appear here -->
+        </section>
+
+        <footer class="input-area">
+            <form id="chat-form">
+                <input type="text" id="user-input" placeholder="Comment puis-je vous aider aujourd'hui ?" autocomplete="off">
+                <button type="submit" id="send-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </form>
+        </footer>
+    </main>
+
+    <!-- Console de Debug Live -->
+    <aside class="debug-panel">
+        <div class="debug-header">
+            <h3>🔴 Live Database Monitor</h3>
+            <span class="anonymity-note">Raw Data View (Secure Context)</span>
+        </div>
+        <div id="db-viewer" class="db-viewer">
+            <!-- Table will be injected here -->
+            <p>Chargement des données...</p>
+        </div>
+    </aside>
+
+    <script src="app.js"></script>
+</body>
+</html>
