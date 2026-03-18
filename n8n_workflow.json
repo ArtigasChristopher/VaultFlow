@@ -85,7 +85,7 @@
             },
             {
               "name": "session_id",
-              "value": "={{ $json.body.sessionId }}"
+              "value": "={{ $json.body.sessionId || \"\" }}"
             }
           ]
         },
@@ -106,7 +106,7 @@
         "url": "http://host.docker.internal:8000/deobfuscate",
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={{ { \"safe_text\": $json.output, \"token_map\": $('Edit Fields').item.json.token_map, \"session_id\": $('Edit Fields').item.json.sessionId } }}",
+        "jsonBody": "={{ { \"safe_text\": $json.output || \"\", \"token_map\": $('Edit Fields').item.json.token_map, \"session_id\": $('Edit Fields').item.json.sessionId || \"\" } }}",
         "options": {}
       },
       "type": "n8n-nodes-base.httpRequest",
@@ -160,7 +160,7 @@
             },
             {
               "name": "session_id",
-              "value": "={{ $('Edit Fields').item.json.sessionId }}"
+              "value": "={{ $('Edit Fields').item.json.sessionId || \"\" }}"
             }
           ]
         },

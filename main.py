@@ -1,5 +1,5 @@
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,24 +31,25 @@ class ToolRequest(BaseModel):
     tool_name: str
     token_args: Dict[str, str] = Field(default_factory=dict)
     token_map: Dict[str, str] = Field(default_factory=dict)
-    session_id: str = None
-    card_token: str = None
-    email_token: str = None
+    session_id: Optional[str] = None
+    card_token: Optional[str] = None
+    email_token: Optional[str] = None
 
 class ToolResponse(BaseModel):
     result: str
 
 class ObfuscateRequest(BaseModel):
     text: str = Field(..., description="The raw text containing sensitive PII.")
-    session_id: str = None
+    session_id: Optional[str] = None
     
-    class Config:
-        json_schema_extra = {
+    model_config = {
+        "json_schema_extra": {
             "example": {
                 "text": "My email is chris@example.com and my credit card is 4242 4242 4242 4242.",
                 "session_id": "session_123"
             }
         }
+    }
 
 class ObfuscateResponse(BaseModel):
     safe_text: str = Field(..., description="The sanitized text with tokens instead of PII.")
@@ -57,7 +58,7 @@ class ObfuscateResponse(BaseModel):
 class DeobfuscateRequest(BaseModel):
     safe_text: str = Field(..., description="The text returned by the LLM (containing tokens).")
     token_map: Dict[str, str] = Field(..., description="The original mapping provided by the obfuscation step.")
-    session_id: str = None
+    session_id: Optional[str] = None
 
 class DeobfuscateResponse(BaseModel):
     original_text: str = Field(..., description="The reconstructed text with original PII values.")

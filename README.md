@@ -50,6 +50,32 @@ Ouvrez simplement `frontend/index.html` dans votre navigateur.
 
 ---
 
+## 🐳 Docker Setup (Recommandé)
+
+Pour une installation rapide et interconnectée du backend et de n8n :
+
+1.  Assurez-vous d'avoir **Docker Desktop** installé et lancé.
+2.  Exécutez le script de lancement automatique :
+    - Sur **Windows (PowerShell)** :
+      ```powershell
+      .\launch.ps1
+      ```
+    - Sur **WSL / Linux (Bash)** :
+      ```bash
+      chmod +x launch.sh
+      ./launch.sh
+      ```
+    *Ce script va lancer les containers, attendre leur initialisation, puis ouvrir le frontend dans Chrome.*
+
+Ou manuellement via Docker Compose :
+```bash
+docker compose up -d
+```
+*   **Backend** : accessible sur `http://localhost:8000`
+*   **n8n** : accessible sur `http://localhost:5678`
+
+---
+
 ## 💎 Pourquoi c'est important ?
 Dans un monde où la confidentialité des données est primordiale, **VaultFlow** prouve qu'on peut allier la puissance des Agents IA et la conformité RGPD la plus stricte. L'IA ne manipule que des indices anonymes, tandis que le contrôle reste entier entre les mains de l'infrastructure sécurisée de l'entreprise.
 

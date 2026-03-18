@@ -1,0 +1,37 @@
+services:
+  backend:
+    build: .
+    container_name: vaultflow-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - vaultflow-network
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    container_name: vaultflow-n8n
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_PORT=5678
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=http://localhost:5678/
+    volumes:
+      - n8n_data:/home/node/.n8n
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - vaultflow-network
+    depends_on:
+      - backend
+
+networks:
+  vaultflow-network:
+    driver: bridge
+
+volumes:
+  n8n_data:
