@@ -53,7 +53,3 @@ Ouvrez simplement `frontend/index.html` dans votre navigateur.
 ## 💎 Pourquoi c'est important ?
 Dans un monde où la confidentialité des données est primordiale, **VaultFlow** prouve qu'on peut allier la puissance des Agents IA et la conformité RGPD la plus stricte. L'IA ne manipule que des indices anonymes, tandis que le contrôle reste entier entre les mains de l'infrastructure sécurisée de l'entreprise.
 
----
-
-## 🕰️ Historique du Projet
-Ce projet a été développé de manière itérative depuis Décembre 2023. Un guide de reconstruction de l'historique Git est disponible dans `git_reconstruction_guide.md` pour visualiser les étapes de conception.
